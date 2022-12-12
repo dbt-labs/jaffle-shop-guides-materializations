@@ -1,11 +1,3 @@
-
-{{
-    config(
-        materialized = 'incremental',
-        unique_key= 'order_id'
-    )
-}}
-
 with
 
 {#
@@ -17,15 +9,6 @@ with
 orders_set as (
 
     select * from {{ ref('stg_orders') }}
-
-    where 
-        true
-    
-    {% if is_incremental() %}
-        
-        and ordered_at >= (select max(ordered_at) from {{ this }})
-    
-    {% endif %}
 
 ),
 
