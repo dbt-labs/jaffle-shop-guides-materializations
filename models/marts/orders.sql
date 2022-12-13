@@ -1,9 +1,8 @@
 with
 
 {#
-     DuckDB will see {{ this }} evaluate to `orders` and a CTE called `orders` as being the same
-     so when using DuckDB we append `_set` to any CTEs with the same name as {{ this }} to indicate
-     we're not executing a recursive statement
+    There is a small bug in DuckDB that will mistakenly think we're making a circular reference if we call
+    this first CTE `orders`, so for the time being we use `orders_set` until it's patched.
 #}
 
 orders_set as (
