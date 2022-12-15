@@ -88,7 +88,14 @@ joined as (
         order_items_summary.subtotal,
 
         order_supplies_summary.order_cost,
-        locations.location_name
+        locations.location_name,
+
+        -- label what order number this is for each customer
+        row_number() over (
+            partition by orders_set.customer_id
+            order by orders_set.ordered_at
+        ) as customer_order_index
+
 
     from orders_set
 
@@ -106,6 +113,7 @@ final as (
     select 
         
         *,
+        customer_order_index = 1 as is_first_order,
         count_food_items > 0 as is_food_order,
         count_drink_items > 0 as is_drink_order
 
